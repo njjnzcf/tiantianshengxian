@@ -27,27 +27,63 @@
             var  num=parseInt($('.num_show').val());
             var total = Math.round(price*100*num)/100;
              $('.total>em').text(total.toFixed(2));
+             $('.total>em').text(total.toFixed(2));
          }    ;
 
 
-            $('.total>em').text(total.toFixed(2));		var $add_x = $('#add_cart').offset().top;
-		var $add_y = $('#add_cart').offset().left;
 
-		var $to_x = $('#show_count').offset().top;
-		var $to_y = $('#show_count').offset().left;
 
-		$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'})
-		$('#add_cart').click(function(){
-			$(".add_jump").stop().animate({
-				'left': $to_y+7,
-				'top': $to_x+7},
-				"fast", function() {
-					$(".add_jump").fadeOut('fast',function(){
-						$('#show_count').html(2);
-					});
 
-			});
-		})
+        function addCard() {
+         var $add_x = $('#add_cart').offset().top;
+            var $add_y = $('#add_cart').offset().left;
+
+            var $to_x = $('#show_count').offset().top;
+            var $to_y = $('#show_count').offset().left;
+
+            $(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'});
+            {% comment %}$('#add_cart').click(function () {
+                判断是否登录 如果没有登录 先提示去登录
+                if ($('.login_btn').text().indexOf('登录')>=0){
+                    alert('请先登录');
+                    location.href='/login';
+                    return;
+                }
+                //动画
+                $(".add_jump").stop().animate({
+                    'left': $to_y+7,
+                    'top': $to_x+7},
+                    "fast", function() {
+                        $(".add_jump").fadeOut('fast',function(){
+                            $('#show_count').html(data.count);
+                        });
+
+                });
+                //异步
+                num = parseInt($('.num_show').val())
+                $.get('/df_cart/add_'+id+'_'+count,function (data) {
+                    $('#show_count').html(data.count);
+                })
+            }){% endcomment %}
+            $('#add_cart').click(function(){
+            var count = $('.num_show').val();
+            var id = {{ g.id }};
+            $.get('/df_cart/add_'+id+'_'+count,function (data) {
+                $(".add_jump").stop().animate({
+                    'left': $to_y+7,
+                    'top': $to_x+7},
+                    "fast", function() {
+                        $(".add_jump").fadeOut('fast',function(){
+                            $('#show_count').html(data.count);
+                        });
+
+                });
+            })
+
+            })
+        }
+
+
 	</script>
 {% endblock head %}
 
@@ -73,7 +109,7 @@
 			<div class="total">总价：<em>{{ g.gprice}}</em></div>
 			<div class="operate_btn">
 				<a href="javascript:;" class="buy_btn">立即购买</a>
-				<a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>
+				<a href="javascript:addCard();" class="add_cart" id="add_cart">加入购物车</a>
 			</div>
 		</div>
 	</div>

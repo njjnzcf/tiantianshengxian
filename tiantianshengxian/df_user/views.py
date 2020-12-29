@@ -60,34 +60,25 @@ def login_handle(request):
     username = post.get('username')
     username = '%s' %username
     pwd = post.get('pwd')
-    print (username)
     jizhu = post.get('jizhu')
-    print ('jizhu=%s'%jizhu)
     user = UserInfo.objects.filter(uname=username)
-    print (user)
     if len(user) == 1:
         s1 = sha1()
         s1.update(pwd)
         if s1.hexdigest() == user[0].upwd:
-            print ('密码蒸汽。。。')
             url = request.COOKIES.get('url','df_goods/index')
             red = HttpResponseRedirect(url)
             if None!=jizhu:
-                print ('记住密码。。。')
                 red.set_cookie('uname', username)
             else:
-                print ('不需要记住密码。。。')
                 red.set_cookie('uname', '', max_age=-1)
             request.session['user_id'] = user[0].id
-            print ('save session=============')
             request.session['user_name'] = username
             return red
         else:
-            print ('密码不正确。。。')
             context = {'title': '用户登录', 'error_name': 0, 'error_pwd':1, 'uname':username, 'upwd': pwd}
             return render(request, 'tt_user/login.html', context)
     else:
-        print ('没有找到。。。')
         context = {'title': '用户登录', 'error_name': 1, 'error_pwd':0, 'uname':username, 'upwd': pwd}
         return render(request,'tt_user/login.html', context)
 

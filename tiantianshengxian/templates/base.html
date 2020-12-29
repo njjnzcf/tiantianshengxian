@@ -1,5 +1,17 @@
 {% extends 'base_foot.html' %}
 
+{% comment %}{% block head%}
+    <script>
+        $(document).ready(function () {
+            alert('ready');
+            $.get('/df_cart/cart',function (data) {
+                alert(data);
+                $('#show_count').html(data.count);
+            })
+        });
+    </script>
+{% endblock head %}{% endcomment %}
+
 {% block body %}
     <div class="header_con">
 		<div class="header">
@@ -22,7 +34,7 @@
 					<span>|</span>
 					<a href="/user/info">用户中心</a>
 					<span>|</span>
-					<a href="cart.html">我的购物车</a>
+					<a href="/df_cart/cart">我的购物车</a>
 					<span>|</span>
 					<a href="user_center_order.html">我的订单</a>
 				</div>
@@ -49,7 +61,7 @@
 		    </div>
             <div class="guest_cart fr">
 			    <a href="#" class="cart_name fl">我的购物车</a>
-			    <div class="goods_count fl" id="show_count">1</div>
+			    <div class="goods_count fl" id="show_count"></div>
 		    </div>
         {% endif %}
 	</div>
